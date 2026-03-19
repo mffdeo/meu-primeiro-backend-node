@@ -53,6 +53,12 @@ Content-Type: application/json
 
 Essa abordagem foi escolhida por ser mais leve e integrada ao ambiente de desenvolvimento, evitando a necessidade de ferramentas externas como o Postman.
 
+## 📄 Documentação
+
+A documentação da API está disponível em:
+
+http://localhost:3000/docs
+
 
 ## 🎯 Objetivo
 
