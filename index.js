@@ -1,10 +1,52 @@
 const express = require('express');
 const app = express();
+//importando o swagger
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 
 //nao sei muito bem, mas acho que serve para transformar o body em json
 app.use(express.json());
+
+//configurando o swagger
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API de Tarefas",
+      version: "1.0.0",
+      description: "Documentação da API de tarefas"
+    },
+  },
+  apis: ["./index.js"],
+};
+
+//criando a documentação
+const specs = swaggerJsdoc(options);
+
+// rota da documentação
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
+
 //criando array tasks vazio
 let tasks = [];
+
+/**
+ * @swagger
+ * /tasks:
+ *   post:
+ *     summary: Cria uma nova tarefa
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               titulo:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Tarefa criada
+ */
 
 //criando a rota POST /tasks
 app.post('/tasks', (req, res) => {
@@ -27,12 +69,37 @@ app.post('/tasks', (req, res) => {
   res.status(201).json(newTask);
 });
 
+/**
+ * @swagger
+ * /tasks:
+ *   get:
+ *     summary: Lista todas as tarefas
+ *     responses:
+ *       200:
+ *         description: Lista de tarefas
+ */
 
 //criando a rota GET /tasks
 app.get('/tasks', (req, res) => {
     //enviando o array tasks
     res.json(tasks);
 });
+
+/**
+ * @swagger
+ * /tasks/{id}:
+ *   delete:
+ *     summary: Remove uma tarefa
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Tarefa removida
+ */
 
 //criando a rota DELETE /tasks
 app.delete('/tasks/:id', (req, res) => {
